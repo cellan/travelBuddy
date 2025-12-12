@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的 - 浙里游</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --primary-light: rgba(59, 130, 246, 0.1);
+            --primary-gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: #F8FAFC;
+        }
+        .poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .gradient-bg {
+            background: var(--primary-gradient);
+        }
+        .achievement-badge {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-user text-xl text-blue-500"></i>
+                    <h1 class="text-lg font-semibold text-gray-800">我的</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="showSettings()" class="p-2 rounded-full bg-gray-100">
+                        <i class="fas fa-cog text-gray-600"></i>
+                    </button>
+                    <button onclick="showNotifications()" class="p-2 rounded-full bg-gray-100 relative">
+                        <i class="fas fa-bell text-gray-600"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Section -->
+    <div class="bg-white">
+        <div class="px-4 py-6">
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-3xl text-white"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-gray-800">旅行者小明</h2>
+                    <p class="text-gray-500 text-sm">已加入 128 天</p>
+                    <div class="flex items-center space-x-2 mt-1">
+                        <div class="flex items-center space-x-1">
+                            <i class="fas fa-star text-yellow-400 text-sm"></i>
+                            <span class="text-sm text-gray-600">4.8</span>
+                        </div>
+                        <span class="text-gray-400">•</span>
+                        <span class="text-sm text-gray-600">12 次行程</span>
+                    </div>
+                </div>
+                <button onclick="editProfile()" class="text-blue-500 text-sm">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="stats-card text-white p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold">12</div>
+                    <div class="text-sm opacity-90">完成行程</div>
+                </div>
+                <div class="stats-card text-white p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold">8</div>
+                    <div class="text-sm opacity-90">匹配搭子</div>
+                </div>
+                <div class="stats-card text-white p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold">156</div>
+                    <div class="text-sm opacity-90">获得点赞</div>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="bg-gray-50 p-4 rounded-xl">
+                <p class="text-gray-600 text-sm">热爱旅行和摄影，喜欢探索浙江的自然风光和人文景观。希望找到志同道合的搭子一起出发！</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="px-4 py-4">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">成就徽章</h3>
+            <button onclick="showAllAchievements()" class="text-blue-500 text-sm">查看全部</button>
+        </div>
+        <div class="flex space-x-3 overflow-x-auto">
+            <div class="achievement-badge text-white p-3 rounded-xl text-center min-w-20">
+                <i class="fas fa-mountain text-2xl mb-1"></i>
+                <div class="text-xs">徒步达人</div>
+            </div>
+            <div class="achievement-badge text-white p-3 rounded-xl text-center min-w-20">
+                <i class="fas fa-camera text-2xl mb-1"></i>
+                <div class="text-xs">摄影高手</div>
+            </div>
+            <div class="achievement-badge text-white p-3 rounded-xl text-center min-w-20">
+                <i class="fas fa-utensils text-2xl mb-1"></i>
+                <div class="text-xs">美食家</div>
+            </div>
+            <div class="bg-gray-200 text-gray-400 p-3 rounded-xl text-center min-w-20">
+                <i class="fas fa-lock text-2xl mb-1"></i>
+                <div class="text-xs">待解锁</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="px-4 py-4 space-y-3">
+        <!-- My Trips -->
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <button onclick="showMyTrips()" class="w-full p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-route text-blue-500"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-medium text-gray-800">我的行程</h4>
+                        <p class="text-sm text-gray-500">管理我的旅行计划</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </button>
+        </div>
+
+        <!-- My Matches -->
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <button onclick="showMyMatches()" class="w-full p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-heart text-red-500"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-medium text-gray-800">我的匹配</h4>
+                        <p class="text-sm text-gray-500">查看匹配到的搭子</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+            </button>
+        </div>
+
+        <!-- Favorites -->
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <button onclick="showFavorites()" class="w-full p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-star text-yellow-500"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-medium text-gray-800">收藏夹</h4>
+                        <p class="text-sm text-gray-500">收藏的景点和行程</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </button>
+        </div>
+
+        <!-- Reviews -->
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <button onclick="showReviews()" class="w-full p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-comment text-green-500"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-medium text-gray-800">我的评价</h4>
+                        <p class="text-sm text-gray-500">查看我的评价记录</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </button>
+        </div>
+
+        <!-- Help & Support -->
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <button onclick="showHelp()" class="w-full p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-question-circle text-purple-500"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-medium text-gray-800">帮助中心</h4>
+                        <p class="text-sm text-gray-500">常见问题和使用指南</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </button>
+        </div>
+
+        <!-- Settings -->
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <button onclick="showSettings()" class="w-full p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-cog text-gray-500"></i>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-medium text-gray-800">设置</h4>
+                        <p class="text-sm text-gray-500">账号和隐私设置</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="px-4 py-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">最近动态</h3>
+        <div class="space-y-3">
+            <div class="bg-white p-4 rounded-xl card-shadow">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-route text-blue-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-800">完成了 <span class="font-medium">西湖徒步</span> 行程</p>
+                        <p class="text-xs text-gray-500 mt-1">2小时前</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl card-shadow">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-heart text-red-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-800">与 <span class="font-medium">小红</span> 成功匹配</p>
+                        <p class="text-xs text-gray-500 mt-1">1天前</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl card-shadow">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-star text-yellow-500 text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-800">获得了新的成就 <span class="font-medium">摄影高手</span></p>
+                        <p class="text-xs text-gray-500 mt-1">2天前</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t z-50">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </a>
+            <a href="match.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-heart text-xl"></i>
+                <span class="text-xs mt-1">找搭子</span>
+            </a>
+            <a href="ai-assistant.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-robot text-xl"></i>
+                <span class="text-xs mt-1">AI助手</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center py-2 text-blue-500">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnimations();
+        });
+
+        function initializeAnimations() {
+            // Animate stats cards
+            anime({
+                targets: '.stats-card',
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutElastic(1, .8)'
+            });
+
+            // Animate achievement badges
+            anime({
+                targets: '.achievement-badge',
+                translateY: [20, 0],
+                opacity: [0, 1],
+                duration: 600,
+                delay: anime.stagger(100, {start: 300}),
+                easing: 'easeOutQuad'
+            });
+
+            // Animate menu items
+            anime({
+                targets: '.bg-white',
+                translateY: [30, 0],
+                opacity: [0, 1],
+                duration: 500,
+                delay: anime.stagger(50, {start: 500}),
+                easing: 'easeOutQuad'
+            });
+        }
+
+        // Profile functions
+        function editProfile() {
+            showNotification('编辑资料功能开发中', 'info');
+        }
+
+        function showSettings() {
+            const modal = createModal('设置', `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="font-medium">通知设置</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="font-medium">隐私设置</span>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="font-medium">账号安全</span>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                    <button onclick="this.closest('.fixed').remove(); showNotification('设置已保存', 'success');" class="w-full py-3 bg-blue-500 text-white rounded-lg font-medium">
+                        保存设置
+                    </button>
+                </div>
+            `);
+        }
+
+        function showNotifications() {
+            const notifications = [
+                { type: 'match', title: '新的匹配', desc: '小明与你匹配成功', time: '2小时前' },
+                { type: 'trip', title: '行程提醒', desc: '明天的西湖行程别忘了', time: '1天前' },
+                { type: 'reward', title: '积分到账', desc: '完成行程获得100积分', time: '2天前' }
+            ];
+            
+            const modal = createModal('通知中心', `
+                <div class="space-y-3">
+                    ${notifications.map(notif => `
+                        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 ${notif.type === 'match' ? 'bg-red-100' : notif.type === 'trip' ? 'bg-blue-100' : 'bg-green-100'} rounded-full flex items-center justify-center">
+                                <i class="fas ${notif.type === 'match' ? 'fa-heart' : notif.type === 'trip' ? 'fa-route' : 'fa-gift'} ${notif.type === 'match' ? 'text-red-500' : notif.type === 'trip' ? 'text-blue-500' : 'text-green-500'}"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-800">${notif.title}</h4>
+                                <p class="text-sm text-gray-600">${notif.desc}</p>
+                                <p class="text-xs text-gray-400">${notif.time}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        function showMyTrips() {
+            const trips = [
+                { name: '西湖一日游', date: '2025-12-15', status: '已完成', image: 'https://kimi-web-img.moonshot.cn/img/photo.travelking.com.tw/f22d3534562d98bd8061a9e8247d95ee77c7a2f8.jpg' },
+                { name: '普陀山朝圣', date: '2025-12-20', status: '计划中', image: 'https://kimi-web-img.moonshot.cn/img/img.redocn.com/f14773a7342e2269fa6ab644562f7dbaaa147006.jpg' },
+                { name: '乌镇古镇游', date: '2025-12-25', status: '计划中', image: 'https://kimi-web-img.moonshot.cn/img/www.locpg.hk/c74224eef2302a4a954eefb6ebd7e37ed75fb65b.jpg' }
+            ];
+            
+            const modal = createModal('我的行程', `
+                <div class="space-y-4">
+                    ${trips.map(trip => `
+                        <div class="card">
+                            <div class="flex space-x-4">
+                                <img src="${trip.image}" alt="${trip.name}" class="w-16 h-16 rounded-lg object-cover">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-800 mb-1">${trip.name}</h4>
+                                    <p class="text-sm text-gray-600 mb-2">${trip.date}</p>
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium ${trip.status === '已完成' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">${trip.status}</span>
+                                </div>
+                                <button onclick="showNotification('行程详情开发中')" class="text-blue-500 text-sm">
+                                    查看详情
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        function showMyMatches() {
+            const matches = [
+                { name: '小明', avatar: null, activity: '西湖徒步', status: '已匹配', rating: 4.8 },
+                { name: '小红', avatar: null, activity: '城市摄影', status: '已匹配', rating: 4.9 },
+                { name: '小李', avatar: null, activity: '美食探索', status: '待确认', rating: 4.7 }
+            ];
+            
+            const modal = createModal('我的匹配', `
+                <div class="space-y-4">
+                    ${matches.map(match => `
+                        <div class="card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-blue-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-800">${match.name}</h4>
+                                    <p class="text-sm text-gray-600">${match.activity}</p>
+                                    <div class="flex items-center space-x-1 mt-1">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs text-gray-600">${match.rating}</span>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium ${match.status === '已匹配' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${match.status}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        function showFavorites() {
+            const favorites = [
+                { name: '西湖', image: 'https://kimi-web-img.moonshot.cn/img/photo.travelking.com.tw/f22d3534562d98bd8061a9e8247d95ee77c7a2f8.jpg', type: '景点' },
+                { name: '灵隐寺', image: 'https://kimi-web-img.moonshot.cn/img/img.redocn.com/f14773a7342e2269fa6ab644562f7dbaaa147006.jpg', type: '景点' },
+                { name: '西湖徒步路线', image: 'https://images.unsplash.com/photo-1449426468159-96aec3f3a856?w=400&h=300&fit=crop', type: '路线' }
+            ];
+            
+            const modal = createModal('收藏夹', `
+                <div class="space-y-4">
+                    ${favorites.map(item => `
+                        <div class="card">
+                            <div class="flex space-x-4">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-800 mb-1">${item.name}</h4>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">${item.type}</span>
+                                </div>
+                                <button onclick="showNotification('取消收藏功能开发中')" class="text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        function showReviews() {
+            const reviews = [
+                { spot: '西湖', rating: 5, comment: '风景优美，值得一去！', date: '2025-12-10' },
+                { spot: '普陀山', rating: 4, comment: '很灵的寺庙，环境很好', date: '2025-12-08' },
+                { spot: '乌镇', rating: 5, comment: '古镇风情很棒，推荐！', date: '2025-12-05' }
+            ];
+            
+            const modal = createModal('我的评价', `
+                <div class="space-y-4">
+                    ${reviews.map(review => `
+                        <div class="card">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-star text-purple-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-semibold text-gray-800">${review.spot}</h4>
+                                        <div class="flex items-center space-x-1">
+                                            ${Array.from({length: review.rating}, (_, i) => '<i class="fas fa-star text-yellow-400 text-xs"></i>').join('')}
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">${review.comment}</p>
+                                    <p class="text-xs text-gray-400">${review.date}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        function showHelp() {
+            const helpItems = [
+                { title: '如何使用APP', icon: 'fa-question-circle' },
+                { title: '常见问题', icon: 'fa-info-circle' },
+                { title: '联系客服', icon: 'fa-headset' },
+                { title: '意见反馈', icon: 'fa-comment' }
+            ];
+            
+            const modal = createModal('帮助中心', `
+                <div class="space-y-3">
+                    ${helpItems.map(item => `
+                        <div class="card cursor-pointer hover:bg-gray-50" onclick="showNotification('${item.title}功能开发中')">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas ${item.icon} text-blue-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-800">${item.title}</h4>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        function showAllAchievements() {
+            const achievements = [
+                { name: '徒步达人', desc: '完成10次徒步活动', icon: 'fa-mountain', unlocked: true },
+                { name: '摄影高手', desc: '获得100个点赞', icon: 'fa-camera', unlocked: true },
+                { name: '美食家', desc: '品尝20种当地美食', icon: 'fa-utensils', unlocked: true },
+                { name: '探索者', desc: '游览50个景点', icon: 'fa-compass', unlocked: false },
+                { name: '社交达人', desc: '匹配20个搭子', icon: 'fa-users', unlocked: false }
+            ];
+            
+            const modal = createModal('成就徽章', `
+                <div class="space-y-4">
+                    ${achievements.map(achievement => `
+                        <div class="card ${achievement.unlocked ? '' : 'opacity-50'}">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 ${achievement.unlocked ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-gray-200'} rounded-full flex items-center justify-center">
+                                    <i class="fas ${achievement.icon} ${achievement.unlocked ? 'text-white' : 'text-gray-400'} text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-800">${achievement.name}</h4>
+                                    <p class="text-sm text-gray-600">${achievement.desc}</p>
+                                </div>
+                                ${achievement.unlocked ? '<i class="fas fa-check text-green-500"></i>' : '<i class="fas fa-lock text-gray-400"></i>'}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+        }
+
+        // 创建模态框的辅助函数
+        function createModal(title, content) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+            
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">${title}</h2>
+                            <button onclick="this.closest('.fixed').remove()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+                                <i class="fas fa-times text-gray-600"></i>
+                            </button>
+                        </div>
+                        ${content}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // 动画效果
+            if (window.anime) {
+                anime({
+                    targets: modal.querySelector('.bg-white'),
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            }
+            
+            return modal;
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-lg text-white text-sm ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update stats randomly
+            const statsElements = document.querySelectorAll('.stats-card .text-2xl');
+            statsElements.forEach((element, index) => {
+                if (Math.random() > 0.95) { // 5% chance to update
+                    const currentValue = parseInt(element.textContent);
+                    element.textContent = currentValue + 1;
+                    
+                    // Animate the update
+                    anime({
+                        targets: element,
+                        scale: [1.2, 1],
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
