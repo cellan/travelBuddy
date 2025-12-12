@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找搭子 - 浙里游</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --primary-light: rgba(59, 130, 246, 0.1);
+            --primary-gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: #F8FAFC;
+        }
+        .poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .gradient-bg {
+            background: var(--primary-gradient);
+        }
+        .swipe-card {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .swipe-card.swipe-left {
+            transform: translateX(-150%) rotate(-20deg);
+            opacity: 0;
+        }
+        .swipe-card.swipe-right {
+            transform: translateX(150%) rotate(20deg);
+            opacity: 0;
+        }
+        .floating-btn {
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-heart text-xl text-blue-500"></i>
+                    <h1 class="text-lg font-semibold text-gray-800">找搭子</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-full bg-gray-100">
+                        <i class="fas fa-filter text-gray-600"></i>
+                    </button>
+                    <button class="p-2 rounded-full bg-gray-100">
+                        <i class="fas fa-search text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter Tabs -->
+    <div class="bg-white border-b px-4 py-3">
+        <div class="flex space-x-6 overflow-x-auto">
+            <button class="filter-tab active whitespace-nowrap pb-2 border-b-2 border-blue-500 text-blue-600 font-medium" data-filter="all">
+                全部
+            </button>
+            <button class="filter-tab whitespace-nowrap pb-2 border-b-2 border-transparent text-gray-500" data-filter="hiking">
+                徒步
+            </button>
+            <button class="filter-tab whitespace-nowrap pb-2 border-b-2 border-transparent text-gray-500" data-filter="photography">
+                摄影
+            </button>
+            <button class="filter-tab whitespace-nowrap pb-2 border-b-2 border-transparent text-gray-500" data-filter="food">
+                美食
+            </button>
+            <button class="filter-tab whitespace-nowrap pb-2 border-b-2 border-transparent text-gray-500" data-filter="culture">
+                文化
+            </button>
+        </div>
+    </div>
+
+    <!-- Match Cards -->
+    <div class="px-4 py-4">
+        <div class="relative h-96">
+            <!-- Card Stack -->
+            <div id="card-stack" class="relative w-full h-full">
+                <!-- Card 1 -->
+                <div class="swipe-card absolute inset-0 bg-white rounded-2xl card-shadow overflow-hidden" data-id="1">
+                    <div class="h-3/5 relative">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="西湖徒步" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">徒步</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-gray-800">小明</h3>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <span class="text-sm text-gray-600">4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">寻找西湖徒步搭子，喜欢摄影的优先</p>
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span><i class="fas fa-map-marker-alt mr-1"></i>杭州</span>
+                            <span><i class="fas fa-calendar mr-1"></i>本周末</span>
+                            <span><i class="fas fa-users mr-1"></i>2-4人</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="swipe-card absolute inset-0 bg-white rounded-2xl card-shadow overflow-hidden" data-id="2">
+                    <div class="h-3/5 relative">
+                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop" alt="城市摄影" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">摄影</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-gray-800">小红</h3>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <span class="text-sm text-gray-600">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">寻找城市摄影搭子，一起探索杭州美景</p>
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span><i class="fas fa-map-marker-alt mr-1"></i>杭州</span>
+                            <span><i class="fas fa-calendar mr-1"></i>下周</span>
+                            <span><i class="fas fa-users mr-1"></i>1-3人</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="swipe-card absolute inset-0 bg-white rounded-2xl card-shadow overflow-hidden" data-id="3">
+                    <div class="h-3/5 relative">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop" alt="美食探索" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">美食</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-gray-800">小李</h3>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <span class="text-sm text-gray-600">4.7</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">寻找美食探索搭子，品尝杭州特色小吃</p>
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span><i class="fas fa-map-marker-alt mr-1"></i>杭州</span>
+                            <span><i class="fas fa-calendar mr-1"></i>随时</span>
+                            <span><i class="fas fa-users mr-1"></i>2-5人</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No More Cards -->
+            <div id="no-cards" class="hidden absolute inset-0 flex items-center justify-center">
+                <div class="text-center">
+                    <i class="fas fa-heart text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 mb-4">暂无更多搭子推荐</p>
+                    <button onclick="refreshCards()" class="bg-blue-500 text-white px-6 py-2 rounded-full">
+                        刷新看看
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Swipe Actions -->
+        <div class="flex justify-center space-x-8 mt-6">
+            <button id="pass-btn" class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                <i class="fas fa-times text-xl text-gray-600"></i>
+            </button>
+            <button id="like-btn" class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center floating-btn">
+                <i class="fas fa-heart text-xl text-white"></i>
+            </button>
+            <button id="super-like-btn" class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center">
+                <i class="fas fa-star text-xl text-white"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="px-4 py-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">快速操作</h3>
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="openPublishModal()" class="bg-white p-4 rounded-xl card-shadow text-center">
+                <i class="fas fa-plus text-2xl text-blue-500 mb-2"></i>
+                <p class="text-sm text-gray-600">发布行程</p>
+            </button>
+            <button onclick="showMyMatches()" class="bg-white p-4 rounded-xl card-shadow text-center">
+                <i class="fas fa-heart text-2xl text-red-500 mb-2"></i>
+                <p class="text-sm text-gray-600">我的匹配</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- Matches List -->
+    <div class="px-4 py-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">最近匹配</h3>
+        <div class="space-y-3">
+            <div class="bg-white p-4 rounded-xl card-shadow flex items-center space-x-3">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-blue-500"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-medium text-gray-800">小王</h4>
+                    <p class="text-sm text-gray-500">西湖徒步 • 本周六</p>
+                </div>
+                <button class="text-blue-500 text-sm font-medium">聊天</button>
+            </div>
+            <div class="bg-white p-4 rounded-xl card-shadow flex items-center space-x-3">
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-purple-500"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-medium text-gray-800">小张</h4>
+                    <p class="text-sm text-gray-500">灵隐寺游玩 • 下周日</p>
+                </div>
+                <button class="text-blue-500 text-sm font-medium">聊天</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publish Modal -->
+    <div id="publish-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl w-full max-w-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">发布行程</h3>
+                    <button onclick="closePublishModal()" class="text-gray-400">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="publish-form">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">行程标题</label>
+                            <input type="text" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="例如：西湖徒步寻找搭子">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">目的地</label>
+                            <input type="text" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="例如：杭州西湖">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">时间</label>
+                            <input type="datetime-local" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">人数</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option>1-2人</option>
+                                <option>2-4人</option>
+                                <option>4-6人</option>
+                                <option>6人以上</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">标签</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="tag-btn px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                    徒步
+                                </button>
+                                <button type="button" class="tag-btn px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                    摄影
+                                </button>
+                                <button type="button" class="tag-btn px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                    美食
+                                </button>
+                                <button type="button" class="tag-btn px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                    文化
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">描述</label>
+                            <textarea class="w-full p-3 border border-gray-300 rounded-lg h-20" placeholder="详细描述你的行程和期望的搭子类型"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3 mt-6">
+                        <button type="button" onclick="closePublishModal()" class="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg">
+                            取消
+                        </button>
+                        <button type="submit" class="flex-1 py-3 bg-blue-500 text-white rounded-lg">
+                            发布
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t z-50">
+        <div class="flex items-center justify-around py-2">
+            <a href="index.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </a>
+            <a href="match.html" class="flex flex-col items-center py-2 text-blue-500">
+                <i class="fas fa-heart text-xl"></i>
+                <span class="text-xs mt-1">找搭子</span>
+            </a>
+            <a href="ai-assistant.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-robot text-xl"></i>
+                <span class="text-xs mt-1">AI助手</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSwipeCards();
+            initializeFilterTabs();
+            initializeTagButtons();
+        });
+
+        // Swipe cards functionality
+        let currentCardIndex = 0;
+        const cards = document.querySelectorAll('.swipe-card');
+
+        function initializeSwipeCards() {
+            const passBtn = document.getElementById('pass-btn');
+            const likeBtn = document.getElementById('like-btn');
+            const superLikeBtn = document.getElementById('super-like-btn');
+
+            passBtn.addEventListener('click', () => swipeCard('left'));
+            likeBtn.addEventListener('click', () => swipeCard('right'));
+            superLikeBtn.addEventListener('click', () => swipeCard('super'));
+
+            // Touch gestures
+            cards.forEach((card, index) => {
+                if (index >= cards.length - 3) { // Only last 3 cards are interactive
+                    addSwipeGestures(card);
+                }
+            });
+        }
+
+        function addSwipeGestures(card) {
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+
+            card.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                isDragging = true;
+            });
+
+            card.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                
+                const currentX = e.touches[0].clientX;
+                const currentY = e.touches[0].clientY;
+                const deltaX = currentX - startX;
+                const deltaY = currentY - startY;
+
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    e.preventDefault();
+                    const rotation = deltaX * 0.1;
+                    card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
+                    card.style.opacity = Math.max(0.3, 1 - Math.abs(deltaX) / 300);
+                }
+            });
+
+            card.addEventListener('touchend', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+
+                const deltaX = e.changedTouches[0].clientX - startX;
+                
+                if (Math.abs(deltaX) > 100) {
+                    if (deltaX > 0) {
+                        swipeCard('right');
+                    } else {
+                        swipeCard('left');
+                    }
+                } else {
+                    // Reset position
+                    card.style.transform = '';
+                    card.style.opacity = '';
+                }
+            });
+        }
+
+        function swipeCard(direction) {
+            if (currentCardIndex >= cards.length) return;
+
+            const card = cards[cards.length - 1 - currentCardIndex];
+            
+            if (direction === 'left') {
+                card.classList.add('swipe-left');
+                showNotification('已跳过', 'info');
+            } else if (direction === 'right') {
+                card.classList.add('swipe-right');
+                showNotification('已喜欢！', 'success');
+                // Simulate match
+                setTimeout(() => {
+                    showMatchNotification();
+                }, 500);
+            } else if (direction === 'super') {
+                card.classList.add('swipe-right');
+                showNotification('超级喜欢！', 'success');
+            }
+
+            currentCardIndex++;
+
+            if (currentCardIndex >= cards.length) {
+                setTimeout(() => {
+                    document.getElementById('no-cards').classList.remove('hidden');
+                }, 300);
+            }
+        }
+
+        function refreshCards() {
+            // Reset cards
+            cards.forEach(card => {
+                card.classList.remove('swipe-left', 'swipe-right');
+                card.style.transform = '';
+                card.style.opacity = '';
+            });
+            document.getElementById('no-cards').classList.add('hidden');
+            currentCardIndex = 0;
+            showNotification('已刷新推荐', 'success');
+        }
+
+        // Filter tabs
+        function initializeFilterTabs() {
+            const tabs = document.querySelectorAll('.filter-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.classList.remove('active', 'border-blue-500', 'text-blue-600');
+                        t.classList.add('border-transparent', 'text-gray-500');
+                    });
+                    tab.classList.add('active', 'border-blue-500', 'text-blue-600');
+                    tab.classList.remove('border-transparent', 'text-gray-500');
+                    
+                    const filter = tab.dataset.filter;
+                    filterCards(filter);
+                });
+            });
+        }
+
+        function filterCards(filter) {
+            // Simulate filtering
+            showNotification(`已切换到${filter === 'all' ? '全部' : filter}标签`, 'info');
+        }
+
+        // Tag buttons in publish modal
+        function initializeTagButtons() {
+            const tagButtons = document.querySelectorAll('.tag-btn');
+            tagButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('bg-blue-500');
+                    btn.classList.toggle('text-white');
+                    btn.classList.toggle('bg-gray-100');
+                    btn.classList.toggle('text-gray-600');
+                });
+            });
+        }
+
+        // Modal functions
+        function openPublishModal() {
+            document.getElementById('publish-modal').classList.remove('hidden');
+        }
+
+        function closePublishModal() {
+            document.getElementById('publish-modal').classList.add('hidden');
+        }
+
+        function showMyMatches() {
+            showNotification('即将推出匹配列表功能', 'info');
+        }
+
+        // Form submission
+        document.getElementById('publish-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            closePublishModal();
+            showNotification('行程发布成功！', 'success');
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-lg text-white text-sm ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        function showMatchNotification() {
+            const matchModal = document.createElement('div');
+            matchModal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center';
+            matchModal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 text-center mx-4">
+                    <i class="fas fa-heart text-6xl text-red-500 mb-4 animate-pulse"></i>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">恭喜匹配成功！</h3>
+                    <p class="text-gray-600 mb-6">你们互相喜欢了对方</p>
+                    <div class="flex space-x-3">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="flex-1 py-2 border border-gray-300 rounded-lg text-gray-700">
+                            稍后再说
+                        </button>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove(); showNotification('即将推出聊天功能', 'info');" class="flex-1 py-2 bg-blue-500 text-white rounded-lg">
+                            立即聊天
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(matchModal);
+            
+            setTimeout(() => {
+                if (matchModal.parentElement) {
+                    matchModal.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
