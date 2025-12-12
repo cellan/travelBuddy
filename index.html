@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浙江旅游搭子 - 智能行程规划</title>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4CD1C4;
+            --primary-light: rgba(76, 209, 196, 0.1);
+            --secondary-color: #32D7E2;
+            --accent-color: #FFA86B;
+            --text-primary: #111111;
+            --text-secondary: #6E6E6E;
+            --border-color: #E5E5E5;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F8F8;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+        }
+        
+        body {
+            font-family: 'Noto Serif SC', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text-primary);
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CD1C4 0%, #32D7E2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 16px 32px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(76, 209, 196, 0.4);
+        }
+        
+        .tag {
+            background: rgba(76, 209, 196, 0.1);
+            color: #4CD1C4;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 0;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-label {
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-map-marked-alt text-2xl text-teal-500"></i>
+                    <h1 class="text-lg font-semibold text-gray-800">浙里游</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="showNotification('搜索功能开发中')" class="p-2 rounded-full bg-gray-100">
+                        <i class="fas fa-search text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="px-4 py-6">
+        <!-- Hero Section -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">发现浙江之美</h2>
+            <p class="text-gray-600 mb-6">智能规划 · 找搭子 · 一起出发</p>
+            
+            <button onclick="openPlanner()" class="btn-primary mb-4">
+                <i class="fas fa-rocket mr-2"></i>
+                开始规划行程
+            </button>
+            
+            <button onclick="window.location.href='match.html'" class="w-full py-3 border-2 border-teal-500 text-teal-500 rounded-full font-semibold">
+                <i class="fas fa-users mr-2"></i>
+                找旅游搭子
+            </button>
+        </div>
+
+        <!-- 热门目的地 -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">热门目的地</h3>
+                <button onclick="viewAllDestinations()" class="text-teal-500 text-sm font-medium">
+                    <i class="fas fa-arrow-right mr-1"></i>
+                    查看更多
+                </button>
+            </div>
+            <div class="grid grid-cols-1 gap-4" id="destinations-container">
+                <!-- 动态生成的目的地 -->
+            </div>
+        </div>
+
+        <!-- 热门景点 -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">热门景点</h3>
+                <button onclick="viewAllAttractions()" class="text-teal-500 text-sm font-medium">
+                    <i class="fas fa-arrow-right mr-1"></i>
+                    查看更多
+                </button>
+            </div>
+            <div class="space-y-4" id="attractions-container">
+                <!-- 动态生成的景点 -->
+            </div>
+        </div>
+
+        <!-- 快速操作 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-6">快速操作</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="card text-center cursor-pointer" onclick="window.location.href='match.html'">
+                    <i class="fas fa-users text-2xl text-teal-500 mb-2"></i>
+                    <h4 class="font-medium text-gray-800 mb-1">找搭子</h4>
+                    <p class="text-sm text-gray-500">匹配旅伴</p>
+                </div>
+                
+                <div class="card text-center cursor-pointer" onclick="window.location.href='ai-assistant.html'">
+                    <i class="fas fa-robot text-2xl text-teal-500 mb-2"></i>
+                    <h4 class="font-medium text-gray-800 mb-1">AI助手</h4>
+                    <p class="text-sm text-gray-500">智能咨询</p>
+                </div>
+                
+                <div class="card text-center cursor-pointer" onclick="showNotification('附近景点功能开发中')">
+                    <i class="fas fa-map-pin text-2xl text-teal-500 mb-2"></i>
+                    <h4 class="font-medium text-gray-800 mb-1">附近景点</h4>
+                    <p class="text-sm text-gray-500">发现周边好去处</p>
+                </div>
+                
+                <div class="card text-center cursor-pointer" onclick="window.location.href='profile.html'">
+                    <i class="fas fa-user text-2xl text-teal-500 mb-2"></i>
+                    <h4 class="font-medium text-gray-800 mb-1">我的</h4>
+                    <p class="text-sm text-gray-500">个人中心</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最新活动 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-6">最新活动</h3>
+            <div class="card">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-gift text-orange-600 text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800 mb-1">新用户专享</h4>
+                        <p class="text-sm text-gray-500">首次规划行程送50元优惠券</p>
+                    </div>
+                    <button onclick="showNotification('优惠券已领取！', 'success')" class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                        领取
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-handshake text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800 mb-1">成功匹配</h4>
+                        <p class="text-sm text-gray-500">匹配成功即可获得积分奖励</p>
+                    </div>
+                    <button onclick="window.location.href='match.html'" class="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                        去匹配
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="flex items-center justify-around">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">首页</span>
+            </a>
+            <a href="match.html" class="nav-item">
+                <i class="fas fa-users nav-icon"></i>
+                <span class="nav-label">找搭子</span>
+            </a>
+            <a href="ai-assistant.html" class="nav-item">
+                <i class="fas fa-robot nav-icon"></i>
+                <span class="nav-label">AI助手</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span class="nav-label">我的</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('修复版首页加载完成');
+            
+            // 初始化热门目的地
+            initDestinations();
+            
+            // 初始化热门景点
+            initAttractions();
+        });
+        
+        // 初始化热门目的地
+        function initDestinations() {
+            const destinations = [
+                {
+                    name: '杭州西湖',
+                    image: 'https://kimi-web-img.moonshot.cn/img/photo.travelking.com.tw/f22d3534562d98bd8061a9e8247d95ee77c7a2f8.jpg',
+                    description: '人间天堂，江南水乡',
+                    rating: 4.8,
+                    price: '免费'
+                },
+                {
+                    name: '普陀山',
+                    image: 'https://kimi-web-img.moonshot.cn/img/img.redocn.com/f14773a7342e2269fa6ab644562f7dbaaa147006.jpg',
+                    description: '海天佛国，心灵净土',
+                    rating: 4.7,
+                    price: '160元'
+                },
+                {
+                    name: '乌镇',
+                    image: 'https://kimi-web-img.moonshot.cn/img/www.locpg.hk/c74224eef2302a4a954eefb6ebd7e37ed75fb65b.jpg',
+                    description: '水乡古镇，烟雨江南',
+                    rating: 4.6,
+                    price: '150元'
+                }
+            ];
+            
+            const container = document.getElementById('destinations-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            destinations.forEach((dest, index) => {
+                const card = document.createElement('div');
+                card.className = 'card cursor-pointer hover:shadow-lg transition-all duration-300';
+                card.onclick = () => showNotification(`${dest.name} 详情功能开发中`);
+                
+                card.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <img src="${dest.image}" alt="${dest.name}" class="w-16 h-16 rounded-xl object-cover">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">${dest.name}</h3>
+                            <p class="text-sm text-gray-600 mb-2">${dest.description}</p>
+                            <div class="flex items-center space-x-2">
+                                <span class="tag">热门</span>
+                                <span class="text-yellow-400"><i class="fas fa-star"></i> ${dest.rating}</span>
+                                <span class="text-sm font-medium text-gray-700">${dest.price}</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // 初始化热门景点
+        function initAttractions() {
+            const attractions = [
+                {
+                    name: '杭州西湖',
+                    image: 'https://kimi-web-img.moonshot.cn/img/photo.travelking.com.tw/f22d3534562d98bd8061a9e8247d95ee77c7a2f8.jpg',
+                    description: '人间天堂，江南水乡，中国最著名的湖泊之一',
+                    rating: 4.8,
+                    price: '免费',
+                    tags: ['5A景区', '文化', '摄影']
+                },
+                {
+                    name: '普陀山',
+                    image: 'https://kimi-web-img.moonshot.cn/img/img.redocn.com/f14773a7342e2269fa6ab644562f7dbaaa147006.jpg',
+                    description: '海天佛国，观音菩萨道场，佛教四大名山之一',
+                    rating: 4.7,
+                    price: '160元',
+                    tags: ['5A景区', '宗教', '文化']
+                },
+                {
+                    name: '乌镇',
+                    image: 'https://kimi-web-img.moonshot.cn/img/www.locpg.hk/c74224eef2302a4a954eefb6ebd7e37ed75fb65b.jpg',
+                    description: '中国最后的枕水人家，江南六大古镇之一',
+                    rating: 4.6,
+                    price: '150元',
+                    tags: ['5A景区', '古镇', '文化']
+                }
+            ];
+            
+            const container = document.getElementById('attractions-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            attractions.forEach((attraction, index) => {
+                const card = document.createElement('div');
+                card.className = 'card cursor-pointer hover:shadow-lg transition-all duration-300';
+                card.onclick = () => showAttractionDetail(attraction);
+                
+                card.innerHTML = `
+                    <div class="flex space-x-4">
+                        <img src="${attraction.image}" alt="${attraction.name}" class="w-20 h-20 rounded-xl object-cover">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="text-lg font-semibold text-gray-800 truncate">${attraction.name}</h3>
+                                <div class="flex items-center space-x-1 flex-shrink-0">
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    <span class="text-sm font-medium text-gray-700">${attraction.rating}</span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3 line-clamp-2">${attraction.description}</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    ${attraction.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                </div>
+                                <span class="text-lg font-bold text-orange-600">${attraction.price}</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // 显示景点详情
+        function showAttractionDetail(attraction) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+            
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <div class="relative">
+                        <img src="${attraction.image}" alt="${attraction.name}" class="w-full h-48 object-cover rounded-t-2xl">
+                        <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-2xl font-bold text-gray-800">${attraction.name}</h2>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="text-sm text-gray-600">${attraction.rating}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">${attraction.description}</p>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-medium text-gray-800 mb-2">特色标签</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${attraction.tags.map(tag => `<span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-gray-600">门票价格</span>
+                                <span class="text-lg font-bold text-orange-600">${attraction.price}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">开放时间</span>
+                                <span class="text-gray-800">全天开放</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button onclick="this.closest('.fixed').remove(); showNotification('已添加到收藏夹', 'success');" class="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium">
+                                <i class="fas fa-heart mr-2"></i>收藏
+                            </button>
+                            <button onclick="this.closest('.fixed').remove(); openPlanner();" class="flex-1 py-3 bg-teal-500 text-white rounded-xl font-medium">
+                                <i class="fas fa-route mr-2"></i>规划行程
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        // 查看所有目的地
+        function viewAllDestinations() {
+            const destinations = [
+                { name: '杭州西湖', image: 'https://kimi-web-img.moonshot.cn/img/photo.travelking.com.tw/f22d3534562d98bd8061a9e8247d95ee77c7a2f8.jpg' },
+                { name: '普陀山', image: 'https://kimi-web-img.moonshot.cn/img/img.redocn.com/f14773a7342e2269fa6ab644562f7dbaaa147006.jpg' },
+                { name: '乌镇', image: 'https://kimi-web-img.moonshot.cn/img/www.locpg.hk/c74224eef2302a4a954eefb6ebd7e37ed75fb65b.jpg' },
+                { name: '千岛湖', image: 'https://images.unsplash.com/photo-1449426468159-96aec3f3a856?w=400&h=300&fit=crop' },
+                { name: '雁荡山', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop' },
+                { name: '天台山', image: 'https://images.unsplash.com/photo-1467377791767-c929e5bc9abc?w=400&h=300&fit=crop' }
+            ];
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+            
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">热门目的地</h2>
+                            <button onclick="this.closest('.fixed').remove()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+                                <i class="fas fa-times text-gray-600"></i>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            ${destinations.map(dest => `
+                                <div class="card text-center cursor-pointer" onclick="showNotification('${dest.name} 详情功能开发中')">
+                                    <img src="${dest.image}" alt="${dest.name}" class="w-full h-24 object-cover rounded-xl mb-3">
+                                    <h3 class="text-sm font-medium text-gray-800">${dest.name}</h3>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        // 查看所有景点
+        function viewAllAttractions() {
+            const attractions = [
+                { name: '杭州西湖', image: 'https://kimi-web-img.moonshot.cn/img/photo.travelking.com.tw/f22d3534562d98bd8061a9e8247d95ee77c7a2f8.jpg' },
+                { name: '普陀山', image: 'https://kimi-web-img.moonshot.cn/img/img.redocn.com/f14773a7342e2269fa6ab644562f7dbaaa147006.jpg' },
+                { name: '乌镇', image: 'https://kimi-web-img.moonshot.cn/img/www.locpg.hk/c74224eef2302a4a954eefb6ebd7e37ed75fb65b.jpg' },
+                { name: '千岛湖', image: 'https://images.unsplash.com/photo-1449426468159-96aec3f3a856?w=400&h=300&fit=crop' },
+                { name: '雁荡山', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop' },
+                { name: '天台山', image: 'https://images.unsplash.com/photo-1467377791767-c929e5bc9abc?w=400&h=300&fit=crop' }
+            ];
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+            
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">热门景点</h2>
+                            <button onclick="this.closest('.fixed').remove()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+                                <i class="fas fa-times text-gray-600"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-4">
+                            ${attractions.map(attraction => `
+                                <div class="card cursor-pointer hover:shadow-md transition-shadow" onclick="showNotification('${attraction.name} 详情功能开发中')">
+                                    <div class="flex space-x-4">
+                                        <img src="${attraction.image}" alt="${attraction.name}" class="w-16 h-16 rounded-lg object-cover">
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="font-semibold text-gray-800 mb-1">${attraction.name}</h3>
+                                            <p class="text-sm text-gray-600 mb-2 line-clamp-2">热门景点，值得一游</p>
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center space-x-1">
+                                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                    <span class="text-sm font-medium">4.8</span>
+                                                    <span class="text-gray-400">·</span>
+                                                    <span class="text-sm text-gray-500">免费</span>
+                                                </div>
+                                                <i class="fas fa-chevron-right text-gray-400"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        // 通知系统
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-lg text-white text-sm ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
